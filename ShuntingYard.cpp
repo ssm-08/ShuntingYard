@@ -139,7 +139,16 @@ int main() {
       cout << endl;
 
       in = createQueue(input);
+      out = ShuntYard(in);
 
+      Node* node = out.front;
+
+      while (node != NULL) {
+	cout << node->token;
+	node = node->next;
+      }
+
+      cout << "\n";
     }
   }
 }
@@ -191,7 +200,7 @@ Queue ShuntYard(Queue in) {
 
       // Pop left associative operators to queue if order is higher
       while (s.peek() != NULL &&
-	     node->getOrder() <= s.peek()->getOrder() && !s.peek()->isRight()) {
+	     !s.peek()->isRight() && node->getOrder() <= s.peek()->getOrder()) {
 
 	out.enqueue(s.pop());
       }
