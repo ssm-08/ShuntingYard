@@ -160,3 +160,50 @@ Queue createQueue(char input[99]) {
   
   return q;
 }
+
+Queue ShuntYard(Queue in) {
+  Stack s = {NULL};
+  Queue out = {NULL, NULL};
+
+  while (in.front != NULL) {
+
+    Node* node = in.front;
+    
+    //Remove node from input
+    in.dequeue();
+    
+    if (node->isNum()) { // Add number to out queue
+      out.enqueue(node);
+    } else if (node->token == '(') { // Add left par to stack
+      s.push(node);
+    } else if (node->token == ')') { // Remove operators for right par
+
+      // Pop operators until left par is reached
+      while (s.peek() != NULL &&
+	     s.peek()->token != '(') {
+	out.enqueue(s.pop());
+      }
+
+      //Remove left par
+      s.pop();
+      
+    } else if (node->isOperator()) { // Add operators to stack
+
+      // Pop left associative operators to queue if order is higher
+      while (s.peek() != NULL &&
+	     node->getOrder() <= s.peek()->getOrder() && !s.peek()->isRight()) {
+
+	out.enqueue(s.pop());
+      }
+      
+      s.push(node);
+    }
+  }
+
+  //Add remaining operators to queue
+  while (s.peek() != NULL) {
+    out.enqueue(s.pop());
+  }
+
+  return out;
+}
