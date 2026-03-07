@@ -15,6 +15,41 @@ struct Node {
   Node* left;
   Node* right;
 
+  bool isNum() {
+    return isdigit(token);
+  }
+  
+  bool isOperator() {
+    if (token == '^') {
+      return true;
+    } else if (token == '*' || token == '/') {
+      return true;
+    } else if (token == '+' || token == '-') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  int getOrder() {
+    if (token == '^') {
+      return 3;
+    } else if (token == '*' || token == '/') {
+      return 2;
+    } else if (token == '+' || token == '-') {
+      return 1;
+    } else {
+      return -1;
+    }    
+  }
+
+  bool isRight() {
+    if (token == '^') {
+      return true;
+    } else {
+      return false;
+    }
+  }
 };
 
 struct Stack {
@@ -79,7 +114,6 @@ struct Queue {
 };
 
 //Program functions
-bool isOperator(char c);
 
 Queue createQueue(char input[99]);
 Queue ShuntYard(Queue q);
@@ -107,20 +141,6 @@ int main() {
       in = createQueue(input);
 
     }
-  }
-}
-
-bool isOperator(char c) {
-  if (c == '(' || c == ')') {
-    return true;
-  } else if (c == '^') {
-    return true;
-  } else if (c == '*' || c == '/') {
-    return true;
-  } else if (c == '+' || c == '-') {
-    return true;
-  } else {
-    return false;
   }
 }
 
