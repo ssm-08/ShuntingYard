@@ -116,15 +116,17 @@ struct Queue {
 //Program functions
 
 Queue createQueue(char input[99]);
-Queue ShuntYard(Queue q);
-void createTree();
+Queue ShuntYard(Queue in);
+Stack createTree(Queue in);
 
+void print(Node* node);
 
 int main() {
 
   Queue in = {NULL, NULL};
   Queue out {NULL, NULL};
-
+  Stack tree = {NULL};
+  
   bool run = true;
   
   char input[99] = "";
@@ -147,8 +149,12 @@ int main() {
 	cout << node->token;
 	node = node->next;
       }
-
       cout << "\n";
+
+      tree = createTree(out);
+
+      print(tree.peek());
+      
     }
   }
 }
@@ -215,4 +221,40 @@ Queue ShuntYard(Queue in) {
   }
 
   return out;
+}
+
+Stack createTree(Queue in) {
+  Stack s = {NULL};
+
+  while (in.front != NULL) {
+    Node * node = in.front;
+    in.dequeue();
+
+    if (node->isNum()) { // Add num to stack
+      s.push(node);
+    } else { // Pop num to leafs of operator tree
+      node->right = s.pop();
+      node->left = s.pop();
+
+      s.push(node);
+    }
+  }
+
+  return s;
+}
+
+void print(Node* node) {
+
+  Node* left = node->left;
+  Node* right = node->right;
+
+  if (left != NULL) {
+    print(left);
+  }
+
+  cout << node->token;
+
+  if (right != NULL) {
+    print(right);
+  }
 }
