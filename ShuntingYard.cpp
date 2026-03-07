@@ -79,8 +79,10 @@ struct Queue {
 };
 
 //Program functions
+bool isOperator(char c);
+
 Queue createQueue(char input[99]);
-void ShuntYard();
+Queue ShuntYard(Queue q);
 void createTree();
 
 
@@ -105,6 +107,20 @@ int main() {
       in = createQueue(input);
 
     }
+  }
+}
+
+bool isOperator(char c) {
+  if (c == '(' || c == ')') {
+    return true;
+  } else if (c == '^') {
+    return true;
+  } else if (c == '*' || c == '/') {
+    return true;
+  } else if (c == '+' || c == '-') {
+    return true;
+  } else {
+    return false;
   }
 }
 
