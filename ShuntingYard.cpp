@@ -43,11 +43,11 @@ struct Node {
     }    
   }
 
-  bool isRight() {
+  bool isLeft() {
     if (token == '^') {
-      return true;
-    } else {
       return false;
+    } else {
+      return true;
     }
   }
 };
@@ -133,12 +133,13 @@ int main() {
 
   while (run == true) {
 
+    cout << "Enter expression: ";
+    cin.getline(input, 99);
+    cout << endl;
+    
     if (strcmp(input, "QUIT") == 0) {
       run = false;
     } else {
-      cout << "Enter expression: ";
-      cin.getline(input, 99);
-      cout << endl;
 
       in = createQueue(input);
       out = ShuntYard(in);
@@ -149,12 +150,12 @@ int main() {
 	cout << node->token;
 	node = node->next;
       }
+      
       cout << "\n";
 
       tree = createTree(out);
-
       print(tree.peek());
-      
+          
     }
   }
 }
@@ -204,11 +205,15 @@ Queue ShuntYard(Queue in) {
       
     } else if (node->isOperator()) { // Add operators to stack
 
-      // Pop left associative operators to queue if order is higher
+      // Pop operators to queue if order is higher
+      
       while (s.peek() != NULL &&
-	     !s.peek()->isRight() && node->getOrder() <= s.peek()->getOrder()) {
-
-	out.enqueue(s.pop());
+	  node->getOrder() <= s.peek()->getOrder()) {
+	// Do not pop if not left associative and equal
+	if (s.peek()->isLeft() ||
+	    node->getOrder() != s.peek()->getOrder()) {
+	  out.enqueue(s.pop());
+	}
       }
       
       s.push(node);
