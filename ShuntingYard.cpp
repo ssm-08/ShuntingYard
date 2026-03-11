@@ -119,10 +119,12 @@ Queue createQueue(char input[99]);
 Queue ShuntYard(Queue in);
 Stack createTree(Queue in);
 
-void print(Node* node);
+void print(Node* node, int n);
 
 int main() {
 
+  //Set up program variables and input
+  
   Queue in = {NULL, NULL};
   Queue out {NULL, NULL};
   Stack tree = {NULL};
@@ -131,31 +133,41 @@ int main() {
   
   char input[99] = "";
 
+  const char* QUIT = "QUIT";
+  const char* IN = "INFIX";
+  const char* POST = "POSTFIX";
+  const char* PRE = "PREFIX";
+  
   while (run == true) {
 
     cout << "Enter expression: ";
     cin.getline(input, 99);
-    cout << endl;
     
     if (strcmp(input, "QUIT") == 0) {
       run = false;
     } else {
 
+      // Process input
+      
       in = createQueue(input);
       out = ShuntYard(in);
+      tree = createTree(out);
 
-      Node* node = out.front;
+      // Print expression
+      
+      cout << "Enter format: ";
+      cin.getline(input, 99);
+      cout << endl;
 
-      while (node != NULL) {
-	cout << node->token;
-	node = node->next;
+      if (strcmp(input, PRE) == 0) {
+	print(tree.peek(), 1);
+      } else if (strcmp(input, IN) == 0) {
+	print(tree.peek(), 2);
+      } else if (strcmp(input, POST) == 0) {
+	print(tree.peek(), 3);
       }
       
-      cout << "\n";
-
-      tree = createTree(out);
-      print(tree.peek());
-          
+      cout << endl;
     }
   }
 }
@@ -248,18 +260,31 @@ Stack createTree(Queue in) {
   return s;
 }
 
-void print(Node* node) {
+void print(Node* node, int n) {
 
   Node* left = node->left;
   Node* right = node->right;
 
+  if (n == 1) {
+    cout << node->token;
+  }
+  
   if (left != NULL) {
-    print(left);
+    print(left, n);
   }
 
-  cout << node->token;
-
+  if (n == 2) {
+    cout << node->token;
+  }
+    
   if (right != NULL) {
-    print(right);
+    print(right, n);
   }
+
+  if (n == 3) {
+    cout << node->token;
+  }
+
+  delete node;
+  node = NULL;
 }
