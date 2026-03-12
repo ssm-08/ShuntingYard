@@ -15,6 +15,7 @@ struct Node {
   Node* left;
   Node* right;
 
+  // Operator and Number functions
   bool isNum() {
     return isdigit(token);
   }
@@ -61,6 +62,7 @@ struct Stack {
     top = node;
   }
 
+  //Stack functions
   Node* pop() {
     Node* node = top;
     
@@ -86,6 +88,7 @@ struct Queue {
   //Last
   Node* rear;
 
+  //Queue functions
   void enqueue(Node* node) {
     if (rear == NULL) { //First node
       rear = node;
@@ -114,7 +117,6 @@ struct Queue {
 };
 
 //Program functions
-
 Queue createQueue(char input[99]);
 Queue ShuntYard(Queue in);
 Stack createTree(Queue in);
@@ -133,6 +135,7 @@ int main() {
   
   char input[99] = "";
 
+  //Commands
   const char* QUIT = "QUIT";
   const char* IN = "INFIX";
   const char* POST = "POSTFIX";
@@ -172,6 +175,7 @@ int main() {
   }
 }
 
+//Create nodes and add to input queue
 Queue createQueue(char input[99]) {
 
   Node* front = NULL;
@@ -189,6 +193,7 @@ Queue createQueue(char input[99]) {
   return q;
 }
 
+//Create output queue using Shunting Yard
 Queue ShuntYard(Queue in) {
   Stack s = {NULL};
   Queue out = {NULL, NULL};
@@ -225,6 +230,8 @@ Queue ShuntYard(Queue in) {
 	if (s.peek()->isLeft() ||
 	    node->getOrder() != s.peek()->getOrder()) {
 	  out.enqueue(s.pop());
+	} else {
+	  break;
 	}
       }
       
@@ -240,6 +247,7 @@ Queue ShuntYard(Queue in) {
   return out;
 }
 
+//Create expression tree
 Stack createTree(Queue in) {
   Stack s = {NULL};
 
@@ -260,6 +268,7 @@ Stack createTree(Queue in) {
   return s;
 }
 
+//Print in different formats recursively
 void print(Node* node, int n) {
 
   Node* left = node->left;
